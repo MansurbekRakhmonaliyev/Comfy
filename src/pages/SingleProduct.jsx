@@ -1,6 +1,8 @@
 import { Link, useLoaderData } from "react-router-dom";
 import { customFetch } from "../components/utils";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import {addItem} from '../features/cardSlice'
 
 export const loader = async ({ params }) => {
   const req = await customFetch(`/products/${params.id}`);
@@ -14,6 +16,16 @@ function SingleProduct() {
   const [activeColor, setActiveColor] = useState(colors[0]);
   const handleAmount = (e)=>{
     setAmount(+e.target.value)
+  }
+  const dispatch = useDispatch()
+  const cartProduct = {
+    cartID: product.id + activeColor,
+    productID: product.id,
+    image, 
+    price,
+    amount,
+    company,
+    productColor: activeColor
   }
   return (
     <section className="container-ms py-20">
@@ -79,7 +91,7 @@ function SingleProduct() {
                 }
               </select>
             </div>
-            <button className="btn btn-secondary btn-md mt-10">ADD TO BAG</button>
+            <button className="btn btn-secondary btn-md mt-10" onClick={()=>dispatch(addItem(cartProduct))}>ADD TO BAG</button>
           </div>
         </div>
         
